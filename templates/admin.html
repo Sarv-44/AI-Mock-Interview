@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="admin-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Admin Panel</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page admin-shell">
+
+<section class="page-intro admin-intro">
+<div class="page-intro-copy">
+<p class="section-kicker">Admin Workspace</p>
+<h2>Manage content and monitor activity</h2>
+<p class="hero-text">
+Track users, recent interview activity, and the live catalog from one workspace.
+</p>
+</div>
+<div class="page-intro-actions">
+<a class="command-link" href="/">Home</a>
+<a class="command-link" href="/profile">Profile</a>
+</div>
+</section>
+
+<section id="admin-access-root" class="admin-access-card">
+<h3>Checking access</h3>
+<p>We are verifying your signed-in account before loading the admin workspace.</p>
+</section>
+
+<section id="admin-workspace" class="admin-workspace" hidden>
+<aside class="admin-sidebar">
+<article class="admin-sidebar-card">
+<p class="section-kicker">Workspace</p>
+<h3>Admin sections</h3>
+<p class="hero-text">
+Open a dashboard, inspect user activity, or edit the content library.
+</p>
+<div class="admin-entity-stack" id="admin-entity-stack">
+<button type="button" class="admin-entity-button" data-entity="overview">
+<span>Overview</span>
+</button>
+<button type="button" class="admin-entity-button" data-entity="users">
+<span>Users</span>
+</button>
+<button type="button" class="admin-entity-button" data-entity="sessions">
+<span>Sessions</span>
+</button>
+<button type="button" class="admin-entity-button" data-entity="topics">
+<span>Topics</span>
+<strong id="admin-topics-count">0</strong>
+</button>
+<button type="button" class="admin-entity-button" data-entity="questions">
+<span>Questions</span>
+<strong id="admin-questions-count">0</strong>
+</button>
+<button type="button" class="admin-entity-button" data-entity="roles">
+<span>Roles</span>
+<strong id="admin-roles-count">0</strong>
+</button>
+</div>
+</article>
+
+<article class="admin-sidebar-card">
+<p class="section-kicker">Notes</p>
+<h3>How to use this cleanly</h3>
+<ul class="admin-note-list">
+<li>Use Overview first to check whether users are active and where practice is concentrating.</li>
+<li>Open Users to inspect who is active, how many sessions they have completed, and who has admin rights.</li>
+<li>Open Sessions to spot recent interview activity and verify what people are actually running.</li>
+<li>Create a topic first, then add questions under it.</li>
+<li>Edit a role when you want to add an existing topic into its weight mix.</li>
+<li>Use the weight inputs to decide how strongly a role should draw from each topic.</li>
+<li>Question IDs are auto-generated for new questions, so you do not have to manage them manually.</li>
+</ul>
+</article>
+</aside>
+
+<div class="admin-editor-card">
+<div class="panel-head admin-panel-head">
+<div>
+<p class="section-kicker">Workspace</p>
+<h3 id="admin-editor-title">Admin overview</h3>
+</div>
+<div class="status-badge" id="admin-global-status">Ready</div>
+</div>
+
+<section class="admin-section" id="admin-section-overview">
+<div class="admin-insight-grid" id="admin-overview-stats">
+<article class="admin-metric-card">
+<span class="summary-label">Users</span>
+<strong id="admin-metric-users">0</strong>
+<p>Total signed up accounts.</p>
+</article>
+<article class="admin-metric-card">
+<span class="summary-label">Admins</span>
+<strong id="admin-metric-admin-users">0</strong>
+<p>Accounts with catalog access.</p>
+</article>
+<article class="admin-metric-card">
+<span class="summary-label">Sessions</span>
+<strong id="admin-metric-sessions">0</strong>
+<p>Total completed interview sessions.</p>
+</article>
+<article class="admin-metric-card">
+<span class="summary-label">Sessions 7d</span>
+<strong id="admin-metric-sessions-7d">0</strong>
+<p>Saved sessions in the last 7 days.</p>
+</article>
+<article class="admin-metric-card">
+<span class="summary-label">Active 7d</span>
+<strong id="admin-metric-active-users">0</strong>
+<p>Users active in the last 7 days.</p>
+</article>
+<article class="admin-metric-card">
+<span class="summary-label">Templates</span>
+<strong id="admin-metric-custom-templates">0</strong>
+<p>Saved custom interview templates.</p>
+</article>
+<article class="admin-metric-card">
+<span class="summary-label">Avg Score</span>
+<strong id="admin-metric-average-score">0</strong>
+<p>Average score across saved sessions.</p>
+</article>
+</div>
+
+<div class="admin-analytics-grid">
+<article class="admin-analytics-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Usage Modes</p>
+<h3>How people are practicing</h3>
+</div>
+</div>
+<div id="admin-mode-breakdown" class="admin-stack-list"></div>
+</article>
+
+<article class="admin-analytics-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Top Topics</p>
+<h3>Where activity is happening</h3>
+</div>
+</div>
+<div id="admin-top-topic-breakdown" class="admin-stack-list"></div>
+</article>
+
+<article class="admin-analytics-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Catalog Health</p>
+<h3>What is live right now</h3>
+</div>
+</div>
+<div id="admin-catalog-health" class="admin-stack-list"></div>
+</article>
+
+<article class="admin-analytics-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Operator Notes</p>
+<h3>What to watch next</h3>
+</div>
+</div>
+<div id="admin-ops-notes" class="admin-stack-list"></div>
+</article>
+</div>
+</section>
+
+<section class="admin-section" id="admin-section-users" hidden>
+<div class="admin-section-banner">
+<div>
+<p class="section-kicker">User Snapshot</p>
+<h3>Accounts, activity, and admin reach</h3>
+</div>
+<p class="hero-text">Use this view to quickly see who is active, who has admin privileges, and whether usage is spreading or concentrating.</p>
+</div>
+<div class="admin-summary-strip" id="admin-users-summary-strip">
+<article class="admin-summary-tile">
+<span class="summary-label">Total Users</span>
+<strong id="admin-users-summary-total">0</strong>
+</article>
+<article class="admin-summary-tile">
+<span class="summary-label">Active 7d</span>
+<strong id="admin-users-summary-active">0</strong>
+</article>
+<article class="admin-summary-tile">
+<span class="summary-label">Admins</span>
+<strong id="admin-users-summary-admins">0</strong>
+</article>
+</div>
+<div class="admin-analytics-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Users</p>
+<h3>Accounts and recent progress</h3>
+</div>
+</div>
+<div class="admin-table-wrap">
+<table class="admin-data-table">
+<thead>
+<tr>
+<th>User</th>
+<th>Role</th>
+<th>Sessions</th>
+<th>7d</th>
+<th>Avg Score</th>
+<th>Last Active</th>
+</tr>
+</thead>
+<tbody id="admin-users-table-body">
+<tr><td colspan="6">Loading users...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<section class="admin-section" id="admin-section-sessions" hidden>
+<div class="admin-section-banner">
+<div>
+<p class="section-kicker">Session Snapshot</p>
+<h3>Recent interview flow and score health</h3>
+</div>
+<p class="hero-text">Use this view to verify what people are actually running, which modes are moving, and whether saved results still look healthy.</p>
+</div>
+<div class="admin-summary-strip" id="admin-sessions-summary-strip">
+<article class="admin-summary-tile">
+<span class="summary-label">Total Sessions</span>
+<strong id="admin-sessions-summary-total">0</strong>
+</article>
+<article class="admin-summary-tile">
+<span class="summary-label">Sessions 7d</span>
+<strong id="admin-sessions-summary-recent">0</strong>
+</article>
+<article class="admin-summary-tile">
+<span class="summary-label">Avg Score</span>
+<strong id="admin-sessions-summary-score">0</strong>
+</article>
+</div>
+<div class="admin-analytics-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Recent Sessions</p>
+<h3>What users have done lately</h3>
+</div>
+</div>
+<div class="admin-table-wrap">
+<table class="admin-data-table">
+<thead>
+<tr>
+<th>When</th>
+<th>User</th>
+<th>Mode</th>
+<th>Topic / Role</th>
+<th>Questions</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody id="admin-sessions-table-body">
+<tr><td colspan="6">Loading sessions...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<section class="admin-section" id="admin-section-topics">
+<div class="admin-mode-row">
+<div class="admin-mode-switch" data-mode-group="topics">
+<button type="button" class="secondary-action admin-mode-button" data-entity-mode="topics" data-mode="add">Add new</button>
+<button type="button" class="secondary-action admin-mode-button" data-entity-mode="topics" data-mode="edit">Change existing</button>
+</div>
+</div>
+<div class="admin-browser-card" id="admin-topic-browser">
+<div class="admin-browser-grid">
+<label class="custom-field admin-browser-search">
+<span class="summary-label">Search Topics</span>
+<input id="admin-topic-search" type="text" placeholder="Search by title, id, category, or subtitle">
+</label>
+<div class="admin-browser-filter-row">
+<label class="custom-field">
+<span class="summary-label">Status Filter</span>
+<select id="admin-topic-status-filter">
+<option value="active">Active</option>
+<option value="all">All</option>
+<option value="archived">Archived</option>
+</select>
+</label>
+<label class="custom-field admin-picker-field" id="admin-topic-picker-field">
+<span class="summary-label">Existing Topic</span>
+<select id="admin-topic-select"></select>
+</label>
+</div>
+</div>
+<div class="admin-record-actions" id="admin-topic-record-actions">
+<div class="admin-record-summary">
+<span class="summary-label">Selected Status</span>
+<strong id="admin-topic-state-chip">-</strong>
+</div>
+<button type="button" class="secondary-action" id="admin-topic-archive-btn">Archive</button>
+<button type="button" class="secondary-action" id="admin-topic-restore-btn">Restore</button>
+<button type="button" class="secondary-action admin-danger-action" id="admin-topic-delete-btn">Delete</button>
+</div>
+</div>
+
+<form id="admin-topic-form" class="admin-form-grid">
+<label class="custom-field">
+<span class="summary-label">Topic ID</span>
+<input id="admin-topic-id" type="text" maxlength="100" placeholder="api_design">
+</label>
+<label class="custom-field">
+<span class="summary-label">Category</span>
+<input id="admin-topic-category" type="text" maxlength="100" placeholder="Backend">
+</label>
+<label class="custom-field">
+<span class="summary-label">Title</span>
+<input id="admin-topic-title" type="text" maxlength="150" placeholder="API Design">
+</label>
+<label class="custom-field">
+<span class="summary-label">Level Label</span>
+<input id="admin-topic-level" type="text" maxlength="100" placeholder="Intermediate">
+</label>
+<label class="custom-field custom-field-wide">
+<span class="summary-label">Subtitle</span>
+<input id="admin-topic-subtitle" type="text" maxlength="255" placeholder="Short line shown in cards and summaries">
+</label>
+<label class="custom-field custom-field-wide">
+<span class="summary-label">Description</span>
+<textarea id="admin-topic-description" rows="4" placeholder="Describe what this track should focus on."></textarea>
+</label>
+<label class="custom-field">
+<span class="summary-label">Accent</span>
+<input id="admin-topic-accent" type="text" maxlength="100" placeholder="blue-ocean">
+</label>
+<div class="admin-form-actions custom-field custom-field-wide">
+<button type="submit" class="primary-action" id="admin-topic-save">Save topic</button>
+<button type="button" class="secondary-action" id="admin-topic-reset">Reset form</button>
+</div>
+<p class="hero-text admin-form-note custom-field custom-field-wide">
+Topic IDs should stay stable because questions and roles refer to them.
+</p>
+</form>
+</section>
+
+<section class="admin-section" id="admin-section-questions" hidden>
+<div class="admin-mode-row">
+<div class="admin-mode-switch" data-mode-group="questions">
+<button type="button" class="secondary-action admin-mode-button" data-entity-mode="questions" data-mode="add">Add new</button>
+<button type="button" class="secondary-action admin-mode-button" data-entity-mode="questions" data-mode="edit">Change existing</button>
+</div>
+</div>
+<div class="admin-browser-card" id="admin-question-browser">
+<div class="admin-browser-grid">
+<label class="custom-field admin-browser-search">
+<span class="summary-label">Search Questions</span>
+<input id="admin-question-search" type="text" placeholder="Search by id, topic, or question text">
+</label>
+<div class="admin-browser-filter-row admin-browser-filter-row-wide">
+<label class="custom-field">
+<span class="summary-label">Status Filter</span>
+<select id="admin-question-status-filter">
+<option value="active">Active</option>
+<option value="all">All</option>
+<option value="archived">Archived</option>
+</select>
+</label>
+<div class="admin-question-picker-cluster">
+<label class="custom-field admin-picker-field" id="admin-question-filter-field">
+<span class="summary-label">Filter by Topic</span>
+<select id="admin-question-filter-topic"></select>
+</label>
+<label class="custom-field admin-picker-field" id="admin-question-picker-field">
+<span class="summary-label">Existing Question</span>
+<select id="admin-question-select"></select>
+</label>
+</div>
+</div>
+</div>
+<div class="admin-record-actions" id="admin-question-record-actions">
+<div class="admin-record-summary">
+<span class="summary-label">Selected Status</span>
+<strong id="admin-question-state-chip">-</strong>
+</div>
+<button type="button" class="secondary-action" id="admin-question-archive-btn">Archive</button>
+<button type="button" class="secondary-action" id="admin-question-restore-btn">Restore</button>
+<button type="button" class="secondary-action admin-danger-action" id="admin-question-delete-btn">Delete</button>
+</div>
+</div>
+
+<form id="admin-question-form" class="admin-form-grid">
+<label class="custom-field">
+<span class="summary-label">Question ID</span>
+<input id="admin-question-id" type="text" readonly placeholder="Auto-generated for new questions">
+</label>
+<label class="custom-field">
+<span class="summary-label">Topic</span>
+<select id="admin-question-topic"></select>
+</label>
+<label class="custom-field">
+<span class="summary-label">Display Order</span>
+<input id="admin-question-order" type="number" min="1" step="1" value="1">
+</label>
+<label class="custom-field">
+<span class="summary-label">Difficulty</span>
+<select id="admin-question-difficulty">
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="hard">Hard</option>
+<option value="custom">Custom</option>
+</select>
+</label>
+<label class="custom-field custom-field-wide">
+<span class="summary-label">Question Text</span>
+<textarea id="admin-question-text" rows="5" placeholder="Write the interview question exactly as it should be asked."></textarea>
+</label>
+<label class="custom-field custom-field-wide">
+<span class="summary-label">Sample Answer</span>
+<textarea id="admin-question-sample" rows="4" placeholder="Optional: sample response for internal guidance."></textarea>
+</label>
+<label class="custom-field custom-field-wide">
+<span class="summary-label">Benchmark Answer</span>
+<textarea id="admin-question-ideal" rows="5" placeholder="Optional: benchmark / guidance answer used by analytics."></textarea>
+</label>
+<div class="admin-form-actions custom-field custom-field-wide">
+<button type="submit" class="primary-action" id="admin-question-save">Save question</button>
+<button type="button" class="secondary-action" id="admin-question-reset">Reset form</button>
+</div>
+</form>
+</section>
+
+<section class="admin-section" id="admin-section-roles" hidden>
+<div class="admin-mode-row">
+<div class="admin-mode-switch" data-mode-group="roles">
+<button type="button" class="secondary-action admin-mode-button" data-entity-mode="roles" data-mode="add">Add new</button>
+<button type="button" class="secondary-action admin-mode-button" data-entity-mode="roles" data-mode="edit">Change existing</button>
+</div>
+</div>
+<div class="admin-browser-card" id="admin-role-browser">
+<div class="admin-browser-grid">
+<label class="custom-field admin-browser-search">
+<span class="summary-label">Search Roles</span>
+<input id="admin-role-search" type="text" placeholder="Search by title, id, or subtitle">
+</label>
+<div class="admin-browser-filter-row">
+<label class="custom-field">
+<span class="summary-label">Status Filter</span>
+<select id="admin-role-status-filter">
+<option value="active">Active</option>
+<option value="all">All</option>
+<option value="archived">Archived</option>
+</select>
+</label>
+<label class="custom-field admin-picker-field" id="admin-role-picker-field">
+<span class="summary-label">Existing Role</span>
+<select id="admin-role-select"></select>
+</label>
+</div>
+</div>
+<div class="admin-record-actions" id="admin-role-record-actions">
+<div class="admin-record-summary">
+<span class="summary-label">Selected Status</span>
+<strong id="admin-role-state-chip">-</strong>
+</div>
+<button type="button" class="secondary-action" id="admin-role-archive-btn">Archive</button>
+<button type="button" class="secondary-action" id="admin-role-restore-btn">Restore</button>
+<button type="button" class="secondary-action admin-danger-action" id="admin-role-delete-btn">Delete</button>
+</div>
+</div>
+
+<form id="admin-role-form" class="admin-form-grid">
+<label class="custom-field">
+<span class="summary-label">Role ID</span>
+<input id="admin-role-id" type="text" maxlength="100" placeholder="backend_engineer">
+</label>
+<label class="custom-field">
+<span class="summary-label">Title</span>
+<input id="admin-role-title" type="text" maxlength="150" placeholder="Backend Engineer">
+</label>
+<label class="custom-field custom-field-wide">
+<span class="summary-label">Subtitle</span>
+<input id="admin-role-subtitle" type="text" maxlength="255" placeholder="Short card label for this interview round">
+</label>
+<label class="custom-field custom-field-wide">
+<span class="summary-label">Description</span>
+<textarea id="admin-role-description" rows="4" placeholder="Describe what this role round is meant to evaluate."></textarea>
+</label>
+<label class="custom-field">
+<span class="summary-label">Level Label</span>
+<input id="admin-role-level" type="text" maxlength="100" placeholder="Interview loop">
+</label>
+<label class="custom-field">
+<span class="summary-label">Default Duration</span>
+<input id="admin-role-default-duration" type="number" min="5" max="240" step="1" value="30">
+</label>
+<label class="custom-field">
+<span class="summary-label">Available Durations</span>
+<input id="admin-role-available-durations" type="text" placeholder="15, 30, 45, 60">
+</label>
+<label class="custom-field">
+<span class="summary-label">Primary Topic</span>
+<select id="admin-role-primary-topic"></select>
+</label>
+
+<div class="custom-field custom-field-wide">
+<div class="admin-weight-head">
+<div>
+<span class="summary-label">Topic Weights</span>
+<p class="hero-text">Set how much each topic should contribute to this role round.</p>
+</div>
+<div class="summary-chip admin-inline-chip">
+<span class="summary-label">Total Weight</span>
+<strong id="admin-role-weight-total">0</strong>
+</div>
+</div>
+<div id="admin-role-topic-weights" class="admin-weight-grid"></div>
+</div>
+
+<div class="admin-form-actions custom-field custom-field-wide">
+<button type="submit" class="primary-action" id="admin-role-save">Save role</button>
+<button type="button" class="secondary-action" id="admin-role-reset">Reset form</button>
+</div>
+</form>
+</section>
+</div>
+</section>
+
+</main>
+
+<script type="module" src="/static/js/admin.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

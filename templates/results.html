@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Results</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/results.css">
+</head>
+
+<body class="results-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Interview Results</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page results-shell">
+
+<section class="results-hero">
+<div>
+<p class="section-kicker">Session Review</p>
+<h2 id="result-title">Interview Summary</h2>
+<p class="hero-text" id="result-subtitle">
+Review your performance, identify weak spots, and carry the strongest feedback into the next round.
+</p>
+<div class="results-hero-tags" id="result-hero-tags"></div>
+</div>
+<div class="hero-actions results-actions">
+<button class="primary-action" onclick="generatePDFReport()" id="pdf-btn">Generate PDF Report</button>
+<button class="secondary-action" id="return-to-plan-btn" hidden>Back to Prep Path</button>
+<button class="secondary-action" onclick="window.location.href='/'">Practice Another Topic</button>
+</div>
+</section>
+
+<section class="results-overview">
+<div class="result-card overview-card">
+<span class="metric-label">Session</span>
+<strong id="result-topic">-</strong>
+</div>
+<div class="result-card overview-card">
+<span class="metric-label">Mode</span>
+<strong id="result-mode">-</strong>
+</div>
+<div class="result-card overview-card">
+<span class="metric-label">Final Score</span>
+<strong id="result-score">-</strong>
+</div>
+<div class="result-card overview-card">
+<span class="metric-label">Strongest Signal</span>
+<strong id="result-strongest-signal">-</strong>
+</div>
+</section>
+
+<section class="results-metrics">
+<div class="result-card metric-card">
+<span class="metric-label">Average Confidence</span>
+<strong id="result-avg-confidence"></strong>
+</div>
+<div class="result-card metric-card">
+<span class="metric-label">Average Content</span>
+<strong id="result-avg-content"></strong>
+</div>
+<div class="result-card metric-card">
+<span class="metric-label">Average Delivery</span>
+<strong id="result-avg-delivery"></strong>
+</div>
+<div class="result-card metric-card">
+<span class="metric-label">Average Speech Speed</span>
+<strong id="result-avg-wpm"></strong>
+</div>
+<div class="result-card metric-card">
+<span class="metric-label">Total Filler Words</span>
+<strong id="result-total-fillers"></strong>
+</div>
+<div class="result-card metric-card">
+<span class="metric-label">Timing Control</span>
+<strong id="result-timing-adherence"></strong>
+</div>
+</section>
+
+<section class="result-card rating-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Track Rating</p>
+<h3>Rate this interview track</h3>
+</div>
+<div class="status-badge" id="rating-summary-pill">No ratings yet</div>
+</div>
+<p class="hero-text" id="rating-copy">
+Use your finished session to rate how useful this topic track felt. One session can submit one rating.
+</p>
+<div class="rating-actions" id="rating-actions">
+<button type="button" class="rating-button" data-rating="1">1</button>
+<button type="button" class="rating-button" data-rating="2">2</button>
+<button type="button" class="rating-button" data-rating="3">3</button>
+<button type="button" class="rating-button" data-rating="4">4</button>
+<button type="button" class="rating-button" data-rating="5">5</button>
+</div>
+<p class="rating-helper" id="rating-helper">Sign in is recommended so your saved interview history and rating stay linked.</p>
+</section>
+
+<section class="results-grid">
+<div class="results-main-stack">
+<div class="result-card charts-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Performance Trends</p>
+<h3>Interview Analytics</h3>
+</div>
+</div>
+<div class="results-highlight-strip" id="results-highlight-strip">
+<div class="results-highlight-card">
+<span class="metric-label">Questions</span>
+<strong id="result-questions">-</strong>
+</div>
+<div class="results-highlight-card">
+<span class="metric-label">Consistency</span>
+<strong id="result-consistency">-</strong>
+</div>
+<div class="results-highlight-card">
+<span class="metric-label">Average Duration</span>
+<strong id="result-avg-duration">-</strong>
+</div>
+<div class="results-highlight-card">
+<span class="metric-label">Pace Control</span>
+<strong id="result-pace-control">-</strong>
+</div>
+</div>
+<div class="chart-grid">
+<div class="chart-card chart-card-wide">
+<h3>Performance Blend</h3>
+<canvas id="performanceBlendChart"></canvas>
+</div>
+<div class="chart-card">
+<h3>Delivery Radar</h3>
+<canvas id="deliveryRadarChart"></canvas>
+</div>
+<div class="chart-card">
+<h3>Filler Distribution</h3>
+<canvas id="fillerChart"></canvas>
+</div>
+<div class="chart-card chart-card-wide">
+<h3>Question Breakdown</h3>
+<canvas id="questionBreakdownChart"></canvas>
+</div>
+<div class="chart-card">
+<h3>Timing Mix</h3>
+<canvas id="timingMixChart"></canvas>
+</div>
+<div class="chart-card">
+<h3>Score Gauge</h3>
+<canvas id="scoreGaugeChart"></canvas>
+</div>
+</div>
+</div>
+
+<div class="result-card question-review-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Question Review</p>
+<h3>Per-question breakdown</h3>
+</div>
+</div>
+<div id="question-review-root" class="question-review-grid">
+<div class="question-review-empty">
+<p>Question-level analytics will appear here after the session summary loads.</p>
+</div>
+</div>
+</div>
+</div>
+
+<aside class="results-sidebar">
+<div class="result-card analysis-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">AI Review</p>
+<h3>Performance analysis</h3>
+</div>
+</div>
+<div class="analysis-stack">
+<div class="analysis-block">
+<h4>Performance Trends</h4>
+<p id="performance-trends"></p>
+</div>
+<div class="analysis-block">
+<h4>Answer Quality</h4>
+<p id="answer-quality"></p>
+</div>
+<div class="analysis-block">
+<h4>Recommendations</h4>
+<p id="recommendations"></p>
+</div>
+<div class="analysis-block">
+<h4>Strongest Areas</h4>
+<div id="result-strengths" class="analysis-pill-list"></div>
+</div>
+<div class="analysis-block">
+<h4>Watch Next</h4>
+<div id="result-risks" class="analysis-pill-list"></div>
+</div>
+</div>
+</div>
+
+<div class="result-card tips-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Next Iteration</p>
+<h3>What to focus on next</h3>
+</div>
+</div>
+<p id="result-tips"></p>
+</div>
+
+<div class="result-card session-facts-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Session Facts</p>
+<h3>Round context</h3>
+</div>
+</div>
+<div id="result-session-facts" class="session-facts-grid">
+<div class="session-fact-tile">
+<span class="metric-label">Duration</span>
+<strong id="result-duration">-</strong>
+</div>
+<div class="session-fact-tile">
+<span class="metric-label">Target Timing</span>
+<strong id="result-target-timing">-</strong>
+</div>
+<div class="session-fact-tile">
+<span class="metric-label">Best Question</span>
+<strong id="result-best-question">-</strong>
+</div>
+<div class="session-fact-tile">
+<span class="metric-label">Needs Work</span>
+<strong id="result-weakest-question">-</strong>
+</div>
+</div>
+</div>
+</aside>
+</section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="/static/js/results.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

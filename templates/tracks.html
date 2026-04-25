@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Tracks</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="tracks-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Topic Tracks</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page discovery-page">
+
+<section class="page-intro">
+<div class="page-intro-copy">
+<p class="section-kicker">Focused Practice</p>
+<h2>Choose one track and sharpen one area at a time.</h2>
+<p class="hero-text">
+Browse curated topic lanes, filter by category, and jump into a focused interview round
+without carrying the extra role-selection noise from the home page.
+</p>
+</div>
+<div class="page-intro-actions">
+<a class="command-link" href="/">Home</a>
+<a class="command-link" href="/roles">Role rounds</a>
+<a class="command-link" href="/prep-paths">Prep paths</a>
+</div>
+</section>
+
+<section class="discovery-stat-row">
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Tracks</span>
+<strong id="tracks-topic-count">Loading tracks...</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Prompts</span>
+<strong id="tracks-question-count">Loading prompts...</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Mode</span>
+<strong>Single-topic interview practice</strong>
+</div>
+</section>
+
+<section class="catalog-section">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Track Browser</p>
+<h3>Search and filter topic lanes</h3>
+</div>
+<p class="section-copy">
+Find a lane by keyword, category, or level and start a focused interview session with one click.
+</p>
+</div>
+
+<div class="catalog-toolbar">
+<div class="catalog-search">
+<input id="topic-search" type="text" placeholder="Search topics, tracks, categories, or skill areas">
+<button id="topic-search-btn" type="button">Search</button>
+</div>
+<div class="catalog-summary" id="catalog-summary">Loading interview tracks...</div>
+</div>
+
+<div class="topic-filter-row">
+<div class="filter-pill-group" id="topic-filter-group"></div>
+<div class="catalog-summary" id="topic-filter-summary">Preparing topic filters...</div>
+</div>
+
+<div class="topic-grid" id="topic-grid"></div>
+</section>
+</main>
+
+<script type="module" src="/static/js/tracks.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

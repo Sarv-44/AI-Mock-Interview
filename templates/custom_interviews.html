@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Interviews</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="custom-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Custom Interviews</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page custom-shell">
+
+<section class="page-intro custom-intro">
+<div class="page-intro-copy">
+<p class="section-kicker">Custom Mode</p>
+<h2>Build your own interview with your own questions, weights, and answer timing.</h2>
+<p class="hero-text">
+Create a custom round for a company-specific screen, mock viva, project review, or personal practice set.
+This mode keeps the delivery analytics and report flow, but skips answer correction and benchmark answers.
+</p>
+</div>
+<div class="page-intro-actions">
+<a class="command-link" href="/">Home</a>
+<a class="command-link" href="/roles">Role rounds</a>
+<a class="command-link" href="/profile">Saved history</a>
+</div>
+</section>
+
+<section class="custom-grid">
+<div class="custom-builder-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Interview Builder</p>
+<h3>Create your interview plan</h3>
+</div>
+<div class="status-badge" id="builder-status">Draft mode</div>
+</div>
+
+<div class="custom-form-grid">
+<label class="custom-field">
+<span class="summary-label">Interview Title</span>
+<input id="custom-title" type="text" maxlength="160" placeholder="Example: Product architecture panel round">
+</label>
+
+<label class="custom-field">
+<span class="summary-label">Total Duration (minutes)</span>
+<input id="custom-duration" type="number" min="5" max="240" step="1" value="30">
+</label>
+
+<label class="custom-field">
+<span class="summary-label">Number of Questions</span>
+<input id="custom-question-total" type="number" min="1" max="20" step="1" value="1">
+</label>
+
+<label class="custom-field custom-field-wide">
+<span class="summary-label">Description</span>
+<textarea id="custom-description" rows="3" placeholder="Optional: note what this interview is for and what the candidate should optimize for."></textarea>
+</label>
+</div>
+
+<div class="custom-summary-row">
+<div class="summary-chip custom-summary-chip">
+<span class="summary-label">Questions</span>
+<strong id="custom-question-count">0</strong>
+</div>
+<div class="summary-chip custom-summary-chip">
+<span class="summary-label">Total Weight</span>
+<strong id="custom-total-weight">0</strong>
+</div>
+<div class="summary-chip custom-summary-chip">
+<span class="summary-label">Target Answer Time</span>
+<strong id="custom-total-target">0 min</strong>
+</div>
+</div>
+
+<div class="custom-question-head">
+<div>
+<p class="section-kicker">Question List</p>
+<h4>Your interview questions</h4>
+</div>
+<div class="custom-question-actions">
+<button class="secondary-action" type="button" id="add-question-btn">Add question</button>
+<button class="secondary-action" type="button" id="rebalance-btn">Rebalance weights</button>
+</div>
+</div>
+
+<div id="custom-question-list" class="custom-question-list"></div>
+
+<div class="custom-builder-actions">
+<button class="primary-action" type="button" id="start-custom-btn">Start custom interview</button>
+<button class="secondary-action" type="button" id="save-custom-btn">Save template</button>
+<button class="secondary-action" type="button" id="reset-custom-btn">Reset builder</button>
+</div>
+<p class="hero-text custom-footnote" id="custom-builder-note">
+Weights are relative. A total of 100 is recommended, but not required.
+</p>
+</div>
+
+<aside class="custom-library-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Saved Templates</p>
+<h3>Reuse past custom interviews</h3>
+</div>
+</div>
+<p class="hero-text" id="custom-library-copy">
+Sign in to save named custom interviews to your account. You can still build and run one as a guest.
+</p>
+<div id="custom-template-list" class="custom-template-list">
+<div class="custom-empty-state">
+<h4>Loading saved templates</h4>
+<p>We are checking whether your account has any saved custom interviews.</p>
+</div>
+</div>
+</aside>
+</section>
+
+</main>
+
+<script type="module" src="/static/js/custom-interviews.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboards</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="leaderboards-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Leaderboards</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page discovery-page">
+
+<section class="page-intro">
+<div class="page-intro-copy">
+<p class="section-kicker">Competitive Progress</p>
+<h2>See who is performing best overall, this week, or on a single topic lane.</h2>
+<p class="hero-text">
+The leaderboard stays anonymous for everyone else, but signed-in users can still see their own exact rank and eligibility progress.
+</p>
+</div>
+<div class="page-intro-actions">
+<a class="command-link" href="/">Home</a>
+<a class="command-link" href="/tracks">Topic tracks</a>
+<a class="command-link" href="/profile">Saved history</a>
+</div>
+</section>
+
+<section class="discovery-stat-row">
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Board</span>
+<strong id="leaderboard-active-label">Overall score</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Eligibility</span>
+<strong id="leaderboard-threshold-label">Loading requirement...</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Ranked Users</span>
+<strong id="leaderboard-user-count">Loading leaderboard...</strong>
+</div>
+</section>
+
+<section class="leaderboard-shell">
+<article class="leaderboard-card leaderboard-card--controls">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Board Switcher</p>
+<h3>Choose the ranking lens</h3>
+</div>
+<p class="section-copy">
+Overall looks at stable average performance, weekly highlights recent momentum, and topic mode focuses on one pure topic track at a time.
+</p>
+</div>
+
+<div class="leaderboard-filter-row" id="leaderboard-filter-row">
+<button class="leaderboard-filter is-active" type="button" data-board="overall" aria-pressed="true">Overall</button>
+<button class="leaderboard-filter" type="button" data-board="weekly" aria-pressed="false">Weekly</button>
+<button class="leaderboard-filter" type="button" data-board="topic" aria-pressed="false">Topic</button>
+
+<label class="leaderboard-topic-picker" id="leaderboard-topic-picker" for="leaderboard-topic-select">
+<span class="summary-label">Topic</span>
+<select id="leaderboard-topic-select" disabled>
+<option value="">Choose a topic</option>
+</select>
+<small id="leaderboard-topic-helper">Switch to topic mode to rank one topic lane at a time.</small>
+</label>
+</div>
+
+<div class="leaderboard-status-banner" id="leaderboard-status-banner" aria-live="polite">
+Loading leaderboard data...
+</div>
+<div class="leaderboard-summary-grid" id="leaderboard-summary-grid">
+<div class="leaderboard-empty-state compact">
+<p>Top performers and current board summary will appear here.</p>
+</div>
+</div>
+</article>
+
+<article class="leaderboard-card leaderboard-card--user">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Your Position</p>
+<h3>Personal rank snapshot</h3>
+</div>
+<p class="section-copy">
+Signed-in users see their real rank and whether they have enough completed interviews to qualify for the selected board.
+</p>
+</div>
+
+<div class="leaderboard-user-panel" id="leaderboard-user-panel">
+<div class="leaderboard-empty-state">
+<h4>Checking account status</h4>
+<p>Sign in to see your exact leaderboard placement and eligibility progress.</p>
+</div>
+</div>
+</article>
+</section>
+
+<section class="leaderboard-card leaderboard-card--table">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Top Performers</p>
+<h3 id="leaderboard-table-title">Leaderboard table</h3>
+</div>
+<p class="section-copy" id="leaderboard-table-copy">
+Entries are anonymous unless the row belongs to the currently signed-in user.
+</p>
+</div>
+
+<div class="leaderboard-table-wrap">
+<table class="leaderboard-table">
+<thead>
+<tr>
+<th>Rank</th>
+<th>Player</th>
+<th>Average Score</th>
+<th>Attempts</th>
+<th>Latest Session</th>
+</tr>
+</thead>
+<tbody id="leaderboard-table-body">
+<tr>
+<td colspan="5">
+<div class="leaderboard-empty-state compact">
+<p>Loading leaderboard entries...</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+</main>
+
+<script type="module" src="/static/js/leaderboards.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

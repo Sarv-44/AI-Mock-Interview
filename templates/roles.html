@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Role Interview Rounds</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="roles-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Role Rounds</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page discovery-page">
+
+<section class="page-intro">
+<div class="page-intro-copy">
+<p class="section-kicker">Mixed Interviews</p>
+<h2>Choose a role and run a more realistic mock interview.</h2>
+<p class="hero-text">
+Pick the role lane, set the round length, and start a mixed interview plan that feels
+closer to an actual screening loop than a single-topic drill.
+</p>
+</div>
+<div class="page-intro-actions">
+<a class="command-link" href="/">Home</a>
+<a class="command-link" href="/tracks">Topic tracks</a>
+<a class="command-link" href="/prep-paths">Prep paths</a>
+</div>
+</section>
+
+<section class="discovery-stat-row">
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Role Lanes</span>
+<strong id="roles-role-count">Loading roles...</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Recommended Length</span>
+<strong id="roles-duration-display">30 minute round</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Mode</span>
+<strong>Role-aligned mixed questions</strong>
+</div>
+</section>
+
+<section class="role-section" id="role-section">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Role Interviews</p>
+<h3>Choose a job-role mock round</h3>
+</div>
+<p class="section-copy">
+Pick a lane and duration to get a more realistic mixed interview instead of a single-topic track.
+</p>
+</div>
+
+<div class="role-toolbar">
+<label class="duration-picker" for="role-duration-select">
+<span class="summary-label">Interview Length</span>
+<select id="role-duration-select">
+<option value="15">15 minutes</option>
+<option value="30" selected>30 minutes</option>
+<option value="60">60 minutes</option>
+</select>
+</label>
+<div class="catalog-summary" id="role-summary">Loading role tracks...</div>
+</div>
+
+<div class="role-spotlight" id="role-spotlight">
+<div class="role-spotlight-copy">
+<p class="section-kicker">Recommended lane</p>
+<h4 id="spotlight-title">Loading recommendation...</h4>
+<p id="spotlight-description">The app will suggest a role round once the catalog is ready.</p>
+<div class="role-spotlight-meta">
+<span class="spotlight-chip" id="spotlight-duration">30 min flow</span>
+<span class="spotlight-chip" id="spotlight-focus">Mixed topics</span>
+</div>
+</div>
+<button class="primary-action spotlight-action" id="spotlight-start-btn" type="button" disabled>Start recommended role</button>
+</div>
+
+<div class="role-grid" id="role-grid"></div>
+</section>
+</main>
+
+<script type="module" src="/static/js/roles.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

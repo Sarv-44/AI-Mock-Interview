@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Session</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="interview-page" data-interview-phase="live">
+
+<header class="interview-appbar">
+<div class="container interview-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Interview Session</h1>
+</div>
+</div>
+
+<div class="appbar-meta">
+<div class="meta-chip">
+<span class="meta-chip-label" id="track-label">Topic</span>
+<strong id="topic">Data Structures</strong>
+</div>
+<div class="meta-chip">
+<span class="meta-chip-label">Question</span>
+<strong id="qnum">Question 1 of 6</strong>
+</div>
+<div class="meta-chip">
+<span class="meta-chip-label" id="difficulty-label">Difficulty</span>
+<strong id="current-difficulty">Medium</strong>
+</div>
+</div>
+
+<div class="appbar-controls interview-account-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container interview-shell">
+<section class="interview-main">
+<div class="hero-card">
+<div class="hero-copy">
+<p class="section-kicker">Current Round</p>
+<h2>Stay direct and answer like this is the real interview.</h2>
+<p id="ai-focus" class="hero-description">
+The interviewer is currently checking technical clarity, pacing, and confidence.
+</p>
+</div>
+<div class="hero-badges">
+<span class="pill" id="difficulty-pill">Medium difficulty</span>
+<span class="pill live-pill" id="stage-label">Prompt delivered</span>
+</div>
+</div>
+
+<div class="prompt-card" id="prompt-panel">
+<div class="prompt-card-top">
+<div>
+<p class="section-kicker">Prompt</p>
+<h3>Focus on the answer in front of you.</h3>
+</div>
+<button class="ghost-button" type="button" onclick="speakQuestion()">Replay Question</button>
+</div>
+
+<div class="question" id="question"></div>
+<p class="question-support" id="ai-prompt-note">
+Answer with structure, explain your reasoning, and use a short example where useful.
+</p>
+
+<div class="prompt-footer">
+<div class="prompt-meta-row">
+<span class="prompt-meta-chip" id="question-id-chip">QID: --</span>
+<span class="prompt-meta-chip" id="question-topic-chip">Topic: --</span>
+<span class="prompt-meta-chip" id="question-weight-chip" hidden>Weight: --</span>
+<span class="prompt-meta-chip" id="question-target-chip" hidden>Target: --</span>
+</div>
+<div class="progress-block">
+<div class="progress-container">
+<div id="progress-bar"></div>
+</div>
+<div class="progress-caption">
+<span id="progress-text">1 / 6 complete</span>
+<span id="progress-guidance">Keep it concise</span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="controls-card" id="controls-panel">
+<div class="controls-card-head">
+<div>
+<p class="section-kicker">Controls</p>
+<h3>Record, stop, move on.</h3>
+</div>
+<div class="status-badge" id="response-state">Ready to answer</div>
+</div>
+<div class="controls-toolbar">
+<button class="start-btn" type="button" onclick="startRecording()">Start Answer</button>
+<button class="stop-btn" type="button" onclick="stopRecording()">Stop Answer</button>
+<button class="next-btn" type="button" onclick="nextQuestion()">Next Question</button>
+</div>
+</div>
+
+<div class="review-hub-card" id="review-workspace">
+<div class="panel-head review-hub-head">
+<div>
+<p class="section-kicker">Review</p>
+<h3 id="review-hub-title">Transcript, answer check, and benchmark</h3>
+</div>
+<div class="review-tab-row">
+<button class="review-tab is-active" id="review-tab-transcript-label" type="button" data-review-pane="transcript">Transcript</button>
+<button class="review-tab" id="review-tab-correction-label" type="button" data-review-pane="correction">Review</button>
+<button class="review-tab" id="review-tab-reference-label" type="button" data-review-pane="reference">Guide</button>
+</div>
+</div>
+
+<div class="review-pane is-active" id="review-pane-transcript">
+<div class="review-pane-head">
+<div>
+<p class="section-kicker">Candidate Answer</p>
+<h4>Live transcript</h4>
+</div>
+<div class="status-inline" id="transcript-badge">Awaiting recording</div>
+</div>
+<p id="transcript" class="transcript-copy">
+Start recording to capture your answer. Your transcript will appear here once analysis is complete.
+</p>
+</div>
+
+<div class="review-pane" id="review-pane-correction">
+<div class="review-pane-head">
+<div>
+<p class="section-kicker" id="correction-kicker">Answer Check</p>
+<h4 id="correction-title">What the system found</h4>
+</div>
+<div class="status-inline" id="answer-quality-badge">Awaiting analysis</div>
+</div>
+<p id="answer-quality-summary" class="coach-copy">
+Finish one response and the system will show what worked, what was weak, and a stronger version of your answer.
+</p>
+<div class="score-ring-grid" id="answer-score-grid">
+<div class="score-ring-card">
+<div class="score-ring" id="score-ring-overall"><span id="score-ring-overall-value">0</span></div>
+<p class="score-ring-label" id="score-ring-overall-label">Overall</p>
+</div>
+<div class="score-ring-card">
+<div class="score-ring" id="score-ring-content"><span id="score-ring-content-value">0</span></div>
+<p class="score-ring-label" id="score-ring-content-label">Content</p>
+</div>
+<div class="score-ring-card">
+<div class="score-ring" id="score-ring-delivery"><span id="score-ring-delivery-value">0</span></div>
+<p class="score-ring-label" id="score-ring-delivery-label">Delivery</p>
+</div>
+<div class="score-ring-card">
+<div class="score-ring" id="score-ring-structure"><span id="score-ring-structure-value">0</span></div>
+<p class="score-ring-label" id="score-ring-structure-label">Structure</p>
+</div>
+<div class="score-ring-card">
+<div class="score-ring" id="score-ring-correctness"><span id="score-ring-correctness-value">0</span></div>
+<p class="score-ring-label" id="score-ring-correctness-label">Correctness</p>
+</div>
+</div>
+<div class="correction-grid">
+<div class="correction-block">
+<h4 id="strengths-title">What went well</h4>
+<ul class="framework-list correction-list" id="answer-strengths">
+<li>We will highlight the strongest parts of your response here.</li>
+</ul>
+</div>
+<div class="correction-block">
+<h4 id="missing-title">Missing or weak points</h4>
+<p class="correction-inline" id="missing-concepts">No missing concepts yet.</p>
+</div>
+</div>
+<div class="correction-block correction-sample-block">
+<h4 id="sample-answer-title">Suggested stronger answer</h4>
+<p id="sample-answer" class="analysis-summary">
+The system will build a stronger version of your answer here after analysis.
+</p>
+</div>
+</div>
+
+<div class="review-pane" id="review-pane-reference">
+<div class="review-pane-head">
+<div>
+<p class="section-kicker" id="reference-kicker">Benchmark Answer</p>
+<h4 id="reference-title">What a strong answer can sound like</h4>
+</div>
+<div class="status-inline" id="reference-source-badge">Question bank benchmark</div>
+</div>
+<div class="correction-block correction-sample-block">
+<h4 id="reference-answer-title">Benchmark answer</h4>
+<p id="ideal-answer" class="analysis-summary">
+The fuller benchmark answer will appear here when the system has a grounded reference for this question.
+</p>
+</div>
+<div class="correction-grid reference-grid">
+<div class="correction-block">
+<h4 id="reference-explanation-title">Why this answer works</h4>
+<p id="reference-explanation" class="analysis-summary">
+The explanation will highlight the structure, technical points, and tradeoffs that make this benchmark answer interview-ready.
+</p>
+</div>
+<div class="correction-block">
+<h4 id="improvement-steps-title">Improve next</h4>
+<ul class="framework-list correction-list" id="improvement-steps">
+<li>Your next-step suggestions will appear here after analysis.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<aside class="interview-side" id="analytics-panel">
+<div class="side-card live-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Live Session</p>
+<h3>Delivery readout</h3>
+</div>
+<div class="coach-pill" id="coach-mode">Balanced delivery</div>
+</div>
+<div class="live-grid">
+<div class="live-metric">
+<span class="metric-label">Timer</span>
+<strong id="timer">00:00</strong>
+</div>
+<div class="live-metric">
+<span class="metric-label">Status</span>
+<strong id="status" class="status-readout">Waiting for your response</strong>
+</div>
+</div>
+</div>
+
+<div class="side-card metrics-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Analytics</p>
+<h3>Speaking signals</h3>
+</div>
+</div>
+<div class="metrics-grid">
+<div class="metric-tile">
+<span class="metric-label">Words</span>
+<strong id="words">0</strong>
+</div>
+<div class="metric-tile">
+<span class="metric-label">Fillers</span>
+<strong id="fillers">0</strong>
+</div>
+<div class="metric-tile">
+<span class="metric-label">Time</span>
+<strong id="duration">0s</strong>
+</div>
+<div class="metric-tile">
+<span class="metric-label">Speed</span>
+<strong id="wpm">0</strong>
+</div>
+<div class="metric-tile confidence-tile">
+<span class="metric-label">Confidence</span>
+<strong id="confidence">0/100</strong>
+</div>
+</div>
+</div>
+
+<div class="side-card coach-card" id="coach-panel">
+<div class="panel-head">
+<div>
+<p class="section-kicker">AI Coach</p>
+<h3>Next adjustment</h3>
+</div>
+</div>
+<p id="coach-tip" class="coach-copy">
+Aim for a confident opening, deliberate pacing, and a clear finish.
+</p>
+<p id="analysis-summary" class="analysis-summary">
+Once you stop recording, the system will score confidence, pace, duration, and filler usage.
+</p>
+</div>
+</aside>
+</main>
+
+<script type="module" src="/static/js/main.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prep Paths</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="planner-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Prep Paths</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page discovery-page">
+
+<section class="page-intro">
+<div class="page-intro-copy">
+<p class="section-kicker">Structured Preparation</p>
+<h2>Build a role-wise prep path without touching your current interview flow.</h2>
+<p class="hero-text">
+Create a separate preparation lane that turns your target role into a sequence of topic revision blocks, checkpoint quizzes, mixed reinforcement, and final mock rounds.
+</p>
+</div>
+<div class="page-intro-actions">
+<a class="command-link" href="/">Home</a>
+<a class="command-link" href="/tracks">Topic tracks</a>
+<a class="command-link" href="/roles">Role rounds</a>
+</div>
+</section>
+
+<section class="discovery-stat-row">
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Roles Ready</span>
+<strong id="planner-role-count">Loading role lanes...</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Prep Shape</span>
+<strong>Revise, quiz, blend, simulate</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Saved Paths</span>
+<strong id="planner-saved-count">Sign in to save</strong>
+</div>
+</section>
+
+<section class="planner-shell">
+<div class="planner-composer planner-card">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Plan Builder</p>
+<h3>Create a role-based study path</h3>
+</div>
+<p class="section-copy">
+Choose the target role and timeline. The planner keeps roles and topics connected, but stores enough snapshot data to stay stable later.
+</p>
+</div>
+
+<form class="planner-form" id="planner-form">
+<label class="planner-field">
+<span class="summary-label">Target role</span>
+<select id="planner-role-select" required>
+<option value="">Choose a role</option>
+</select>
+</label>
+
+<label class="planner-field">
+<span class="summary-label">Target days</span>
+<input id="planner-days-input" type="number" min="7" max="120" value="40" required>
+</label>
+
+<button class="hero-link planner-submit" id="planner-submit-btn" type="submit">Create prep path</button>
+</form>
+
+<div class="planner-banner" id="planner-status-banner">Choose a role and generate the first prep path.</div>
+</div>
+
+<aside class="planner-history planner-card">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Saved Paths</p>
+<h3>Your latest prep plans</h3>
+</div>
+<p class="section-copy">
+This stays separate from interview history so you can experiment without disturbing the current flow.
+</p>
+</div>
+<div class="planner-plan-list" id="planner-plan-list">
+<div class="planner-empty-state">
+<h4>Sign in to start saving</h4>
+<p>Prep paths are user-specific, so we only save and reload them for signed-in accounts.</p>
+</div>
+</div>
+</aside>
+</section>
+
+<section class="planner-detail-grid">
+<article class="planner-card planner-detail-panel">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Path Overview</p>
+<h3 id="planner-detail-title">No prep path selected yet</h3>
+</div>
+<p class="section-copy" id="planner-detail-copy">
+Generate a role-based path to see the phase breakdown, day sequence, and study materials.
+</p>
+</div>
+
+<div class="planner-phase-strip" id="planner-phase-strip">
+<div class="planner-empty-state compact">
+<p>The planner will map the preparation into phases once a path is created.</p>
+</div>
+</div>
+
+<div class="planner-progress-strip" id="planner-progress-strip">
+<div class="planner-empty-state compact">
+<p>Progress, score trend, and next-step guidance will appear here after a path is generated.</p>
+</div>
+</div>
+
+<div class="planner-steps" id="planner-steps-root">
+<div class="planner-empty-state">
+<h4>No scheduled steps yet</h4>
+<p>Your revision blocks, quizzes, and mock rounds will appear here in order.</p>
+</div>
+</div>
+</article>
+</section>
+
+<section class="planner-material-section">
+<article class="planner-card planner-material-panel">
+<div class="section-heading">
+<div>
+<p class="section-kicker">Study Material</p>
+<h3>Topic notes for revision passes</h3>
+</div>
+<p class="section-copy">
+This now acts like the revision layer behind the prep path: compact answer panels, quick comparison rows, prompt examples, and benchmark-style answers for each focus topic.
+</p>
+</div>
+
+<div class="planner-material-grid" id="planner-material-root">
+<div class="planner-empty-state">
+<h4>No materials loaded yet</h4>
+<p>Once a prep path is created, the focus topics and revision notes for that role will show up here.</p>
+</div>
+</div>
+</article>
+</section>
+
+<section class="planner-notes-grid">
+<article class="planner-note-card">
+<span class="summary-label">Foundation</span>
+<strong>Topic-wise revision and checkpoint quizzes</strong>
+<p>Early steps stay focused so the user learns one lane cleanly before mixing pressure.</p>
+</article>
+<article class="planner-note-card">
+<span class="summary-label">Simulation</span>
+<strong>Mixed quizzes and role-style mocks</strong>
+<p>Later steps shift into broader recall and full role rounds without duplicating your current interview system.</p>
+</article>
+</section>
+
+</main>
+
+<script type="module" src="/static/js/planner.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

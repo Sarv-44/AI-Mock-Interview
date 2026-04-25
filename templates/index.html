@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Interview Practice</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="landing-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Interview Practice</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div id="theme-menu-slot"></div>
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page discovery-page">
+
+<section class="home-hero">
+<div class="home-hero-copy">
+<p class="section-kicker">Preparation Flow</p>
+<div class="home-hero-badges">
+<span>Topic drills</span>
+<span>Role loops</span>
+<span>Custom mocks</span>
+</div>
+<h2>Train like the interview is already on the calendar.</h2>
+<p class="hero-text">
+Move from focused concept drills to role-style rounds and custom interview plans without losing the review trail, score breakdown, or transcript feedback.
+</p>
+<div class="hero-actions">
+<a href="/tracks" class="hero-link">Browse topic tracks</a>
+<a href="/roles" class="secondary-action">Browse role rounds</a>
+<a href="/prep-paths" class="secondary-action">Prep paths</a>
+</div>
+<div class="home-hero-footnote">
+<div class="hero-footnote-card">
+<span class="summary-label">Best For</span>
+<strong>Students, placements, mock rounds, and role-specific prep</strong>
+</div>
+<div class="hero-footnote-card">
+<span class="summary-label">Why It Works</span>
+<strong>Choose, answer, review, then repeat with cleaner signals each round</strong>
+</div>
+</div>
+</div>
+
+<div class="home-hero-panel">
+<div class="hero-panel-card hero-panel-card-featured">
+<span class="summary-label">Fastest Path</span>
+<strong>Pick one lane and finish one meaningful round today.</strong>
+<p>The platform works best when you keep the loop tight: choose a mode, answer out loud, review the weak spots, then run the next round with intent.</p>
+<div class="hero-panel-list">
+<span>Start with tracks for targeted repetition</span>
+<span>Switch to roles when you want mixed pressure</span>
+<span>Use custom mode for company or viva-style prompts</span>
+</div>
+</div>
+<div class="hero-panel-card">
+<span class="summary-label">Tracks</span>
+<strong id="home-topic-count">Loading tracks...</strong>
+<p>Focused drills with search, filters, and fast start.</p>
+</div>
+<div class="hero-panel-card">
+<span class="summary-label">Roles</span>
+<strong id="home-role-count">Loading role rounds...</strong>
+<p>Mixed rounds that feel closer to a real interview loop.</p>
+</div>
+</div>
+</section>
+
+<section class="discovery-stat-row">
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Question Bank</span>
+<strong id="home-question-count">Loading prompts...</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Workspace</span>
+<strong>Focused interview cockpit</strong>
+</div>
+<div class="summary-chip landing-summary-chip">
+<span class="summary-label">Reports</span>
+<strong>Review, transcript, PDF</strong>
+</div>
+</section>
+
+<section class="home-journey">
+<div class="section-heading">
+<div>
+<p class="section-kicker">How It Flows</p>
+<h3>One clean practice loop instead of scattered prep</h3>
+</div>
+<p class="section-copy">
+Use the platform when you want each practice session to end with something useful: a score, a transcript, a delivery read, and a clearer next step.
+</p>
+</div>
+
+<div class="home-journey-grid">
+<article class="home-journey-card">
+<span class="home-journey-step">01</span>
+<h4>Choose the right format</h4>
+<p>Start with a topic lane for repetition, a role round for breadth, or a custom plan when your interview already has a known structure.</p>
+</article>
+<article class="home-journey-card">
+<span class="home-journey-step">02</span>
+<h4>Answer under light pressure</h4>
+<p>Speak through the round in one focused workspace so the session feels closer to a real interview than reading prompts from a list.</p>
+</article>
+<article class="home-journey-card">
+<span class="home-journey-step">03</span>
+<h4>Review and adjust fast</h4>
+<p>Use the transcript, score, pacing, and report output to decide what to repeat next instead of guessing where you slipped.</p>
+</article>
+</div>
+</section>
+
+<section class="mode-grid">
+<article class="mode-card">
+<p class="section-kicker">Topic Tracks</p>
+<h3>Practice one concept lane at a time</h3>
+<p>
+Use this for focused repetition on one area at a time.
+</p>
+<ul class="mode-list">
+<li>Search and filter by category</li>
+<li>See ratings and practice activity</li>
+<li>Start a focused round immediately</li>
+</ul>
+<a href="/tracks" class="hero-link">Open tracks</a>
+</article>
+
+<article class="mode-card">
+<p class="section-kicker">Role Rounds</p>
+<h3>Run a more realistic mixed interview</h3>
+<p>
+Use this for a broader role simulation instead of a single-topic drill.
+</p>
+<ul class="mode-list">
+<li>Choose round duration</li>
+<li>See focus areas for each role</li>
+<li>Start a role-aligned interview plan</li>
+</ul>
+<a href="/roles" class="hero-link">Open role rounds</a>
+</article>
+
+<article class="mode-card">
+<p class="section-kicker">Prep Paths</p>
+<h3>Turn one target role into a timed preparation path</h3>
+<p>
+Use this when you want a separate revision and quiz lane before stepping into the full mock flow.
+</p>
+<ul class="mode-list">
+<li>Create a 7 to 120 day path</li>
+<li>Get topic revision blocks and mixed checkpoints</li>
+<li>Keep planner work separate from interview runtime</li>
+</ul>
+<a href="/prep-paths" class="hero-link">Open prep paths</a>
+</article>
+
+<article class="mode-card">
+<p class="section-kicker">Custom Interviews</p>
+<h3>Create a company-specific or self-designed interview</h3>
+<p>
+Use this when you already have the questions and want your own structure.
+</p>
+<ul class="mode-list">
+<li>Add your own questions</li>
+<li>Set per-question weight and time</li>
+<li>Get delivery analytics and report export</li>
+</ul>
+<a href="/custom-interviews" class="hero-link">Open custom builder</a>
+</article>
+</section>
+
+<section class="preview-grid">
+<article class="preview-card">
+<div class="preview-head">
+<div>
+<p class="section-kicker">Featured Track</p>
+<h3>Recommended topic lane</h3>
+</div>
+<a href="/tracks" class="command-link">See all tracks</a>
+</div>
+<div id="featured-topic-root" class="preview-slot">
+<p class="preview-empty">Loading a featured topic track...</p>
+</div>
+</article>
+
+<article class="preview-card">
+<div class="preview-head">
+<div>
+<p class="section-kicker">Featured Role</p>
+<h3>Recommended interview lane</h3>
+</div>
+<a href="/roles" class="command-link">See all roles</a>
+</div>
+<div id="featured-role-root" class="preview-slot">
+<p class="preview-empty">Loading a featured role round...</p>
+</div>
+</article>
+</main>
+
+<script type="module" src="/static/js/home.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

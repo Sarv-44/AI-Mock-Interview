@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Profile</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="profile-page">
+
+<header class="platform-appbar">
+<div class="container platform-appbar-inner">
+<div class="brand-block">
+<div class="brand-mark">AI</div>
+<div>
+<p class="brand-eyebrow">Mock Interview Platform</p>
+<h1>Your Profile</h1>
+</div>
+</div>
+<div class="appbar-controls">
+<div class="appbar-actions" id="account-actions"></div>
+</div>
+</div>
+</header>
+
+<main class="container platform-page profile-layout">
+
+<section class="profile-hero">
+<div class="profile-card">
+<p class="section-kicker">Account Overview</p>
+<h2 id="profile-name">Guest mode</h2>
+<p class="hero-text" id="profile-copy">
+Sign in to connect your interviews, revisit past reports, and build a clean practice history.
+</p>
+<div class="profile-meta-grid">
+<div class="profile-meta-card">
+<span class="summary-label">Email</span>
+<strong id="profile-email">-</strong>
+</div>
+<div class="profile-meta-card">
+<span class="summary-label">Member Since</span>
+<strong id="profile-member-since">-</strong>
+</div>
+<div class="profile-meta-card">
+<span class="summary-label">User ID</span>
+<strong id="profile-user-id">-</strong>
+</div>
+<div class="profile-meta-card">
+<span class="summary-label">Next Step</span>
+<strong id="profile-next-step">Finish one new interview</strong>
+</div>
+</div>
+</div>
+
+<div class="profile-card profile-side-card">
+<p class="section-kicker">History</p>
+<h3>How this page works</h3>
+<p class="hero-text">
+Every completed interview that is saved while signed in can appear here. You can reopen the report view or export the PDF again.
+</p>
+<div class="profile-side-actions">
+<a href="/" class="secondary-action">Home</a>
+<a href="/leaderboards" class="secondary-action">Leaderboards</a>
+<a href="/interview" class="primary-action">Start interview</a>
+</div>
+</div>
+</section>
+
+<section class="profile-summary-row">
+<div class="profile-card profile-summary-card">
+<span class="summary-label">Saved Sessions</span>
+<strong id="profile-history-count">0</strong>
+</div>
+<div class="profile-card profile-summary-card">
+<span class="summary-label">Latest Topic</span>
+<strong id="profile-latest-topic">-</strong>
+</div>
+</section>
+
+<section class="profile-history-card">
+<div class="panel-head">
+<div>
+<p class="section-kicker">Interview History</p>
+<h3>Saved sessions</h3>
+</div>
+</div>
+<div id="history-content" class="history-list">
+<div class="history-empty-state">
+<h4>Loading your account</h4>
+<p>We are checking the local signed-in user and then pulling recent interview sessions.</p>
+</div>
+</div>
+</section>
+</main>
+
+<script type="module" src="/static/js/profile.js"></script>
+<script type="module" src="/static/js/appbar-account.js"></script>
+<script type="module" src="/static/js/ui-theme.js"></script>
+
+</body>
+</html>

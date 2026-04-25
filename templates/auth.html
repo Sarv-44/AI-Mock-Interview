@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Access | Mock Interview Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/auth.css">
+</head>
+<body class="auth-page">
+    <header class="platform-appbar">
+        <div class="container platform-appbar-inner">
+            <div class="brand-block">
+                <div class="brand-mark">AI</div>
+                <div>
+                    <p class="brand-eyebrow">Mock Interview Platform</p>
+                    <h1>Account Access</h1>
+                </div>
+            </div>
+            <div class="appbar-controls">
+                <div class="appbar-actions" id="account-actions"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container platform-page auth-shell">
+        <section class="auth-hero-card">
+            <p class="eyebrow">Stay consistent</p>
+            <h2>Save interviews, rate topics, and keep your profile connected.</h2>
+            <p class="auth-hero-copy">
+                Use one clean account flow. Sign in if you already have a profile, or create a new one when you are ready to save your sessions.
+            </p>
+
+            <div class="auth-benefits">
+                <article class="auth-benefit-card">
+                    <span>History</span>
+                    <strong>Reconnect saved sessions</strong>
+                </article>
+                <article class="auth-benefit-card">
+                    <span>Ratings</span>
+                    <strong>Leave real topic feedback</strong>
+                </article>
+                <article class="auth-benefit-card">
+                    <span>Reports</span>
+                    <strong>Return to past PDFs quickly</strong>
+                </article>
+            </div>
+        </section>
+
+        <section class="auth-panel">
+            <div class="auth-mode-switch" role="tablist" aria-label="Authentication mode">
+                <button type="button" class="auth-mode-tab" data-auth-mode="signin" aria-selected="true">Sign in</button>
+                <button type="button" class="auth-mode-tab" data-auth-mode="signup" aria-selected="false">Create account</button>
+            </div>
+
+            <div class="auth-card" data-auth-panel="signin">
+                <div class="auth-card-head">
+                    <p class="eyebrow">Welcome back</p>
+                    <h3>Sign in to continue your interview prep.</h3>
+                </div>
+
+                <form id="signin-form" class="auth-form">
+                    <label class="auth-field">
+                        <span>Email</span>
+                        <input id="signin-email" name="email" type="email" autocomplete="email" required>
+                    </label>
+
+                    <label class="auth-field">
+                        <span>Password</span>
+                        <input id="signin-password" name="password" type="password" autocomplete="current-password" required>
+                    </label>
+
+                    <button type="submit" class="primary-action auth-submit">Sign in</button>
+                </form>
+            </div>
+
+            <div class="auth-card" data-auth-panel="signup" hidden>
+                <div class="auth-card-head">
+                    <p class="eyebrow">New here</p>
+                    <h3>Create an account for saved history and ratings.</h3>
+                </div>
+
+                <form id="signup-form" class="auth-form">
+                    <label class="auth-field">
+                        <span>Username</span>
+                        <input id="signup-username" name="username" type="text" autocomplete="username" required>
+                    </label>
+
+                    <label class="auth-field">
+                        <span>Email</span>
+                        <input id="signup-email" name="email" type="email" autocomplete="email" required>
+                    </label>
+
+                    <label class="auth-field">
+                        <span>Password</span>
+                        <input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+                    </label>
+
+                    <button type="submit" class="primary-action auth-submit">Create account</button>
+                </form>
+            </div>
+
+            <p id="auth-message" class="auth-message" hidden></p>
+        </section>
+    </main>
+
+    <script type="module" src="/static/js/session.js"></script>
+    <script type="module" src="/static/js/auth.js"></script>
+    <script type="module" src="/static/js/ui-theme.js"></script>
+</body>
+</html>

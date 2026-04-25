@@ -1,0 +1,186 @@
+{
+  "users": {
+    "signed_in": {
+      "user_id": "user-123",
+      "username": "mockuser",
+      "email": "mockuser@example.com",
+      "created_at": "2026-03-19 10:00:00"
+    },
+    "other_user": {
+      "user_id": "user-999",
+      "username": "otheruser",
+      "email": "otheruser@example.com",
+      "created_at": "2026-03-19 11:00:00"
+    }
+  },
+  "ratings": [
+    {
+      "topic_id": "graphs",
+      "average_rating": 4.5,
+      "rating_count": 8
+    },
+    {
+      "topic_id": "systemdesign",
+      "average_rating": 4.8,
+      "rating_count": 5
+    }
+  ],
+  "activity": [
+    {
+      "topic_id": "graphs",
+      "interview_count": 14
+    },
+    {
+      "topic_id": "systemdesign",
+      "interview_count": 9
+    }
+  ],
+  "history": [
+    {
+      "session_id": "signed-session-001",
+      "user_id": "user-123",
+      "topic": "graphs",
+      "final_score": 84,
+      "created_at": "2026-03-19 10:30:00",
+      "questions_total": 6,
+      "duration_seconds": 118.5,
+      "interview_date": "2026-03-19T10:30:00"
+    }
+  ],
+  "sessions": {
+    "guest": {
+      "session_id": "guest-session-001",
+      "user_id": null,
+      "topic": "graphs",
+      "final_score": 78,
+      "created_at": "2026-03-19 09:45:00",
+      "complete_data": {
+        "session_id": "guest-session-001",
+        "topic": "graphs",
+        "final_score": 78,
+        "questions_total": 2,
+        "questions": [
+          {
+            "question": "Explain BFS.",
+            "answer": "BFS explores the graph level by level.",
+            "confidence": 76,
+            "wpm": 140,
+            "duration": 25,
+            "filler_words": [],
+            "filler_count": 0
+          },
+          {
+            "question": "Explain DFS.",
+            "answer": "DFS explores depth first and uses a stack or recursion.",
+            "confidence": 80,
+            "wpm": 145,
+            "duration": 28,
+            "filler_words": [
+              "um"
+            ],
+            "filler_count": 1
+          }
+        ],
+        "confidence_history": [
+          76,
+          80
+        ],
+        "wpm_history": [
+          140,
+          145
+        ],
+        "filler_history": [
+          0,
+          1
+        ],
+        "interview_date": "2026-03-19T09:45:00"
+      }
+    },
+    "signed": {
+      "session_id": "signed-session-001",
+      "user_id": "user-123",
+      "topic": "systemdesign",
+      "final_score": 91,
+      "created_at": "2026-03-19 10:30:00",
+      "complete_data": {
+        "session_id": "signed-session-001",
+        "user_id": "user-123",
+        "topic": "systemdesign",
+        "final_score": 91,
+        "questions_total": 2,
+        "questions": [
+          {
+            "question": "Design a URL shortener.",
+            "answer": "I would separate write and read paths and use caching.",
+            "confidence": 88,
+            "wpm": 150,
+            "duration": 32,
+            "filler_words": [],
+            "filler_count": 0
+          },
+          {
+            "question": "How do you rate limit?",
+            "answer": "Token buckets work well for bursty traffic.",
+            "confidence": 94,
+            "wpm": 148,
+            "duration": 29,
+            "filler_words": [],
+            "filler_count": 0
+          }
+        ],
+        "confidence_history": [
+          88,
+          94
+        ],
+        "wpm_history": [
+          150,
+          148
+        ],
+        "filler_history": [
+          0,
+          0
+        ],
+        "interview_date": "2026-03-19T10:30:00"
+      }
+    }
+  },
+  "transcribe_analysis": {
+    "transcript": "Breadth first search explores nodes level by level using a queue.",
+    "word_count": 11,
+    "filler_words": 0,
+    "filler_list": [],
+    "duration": 12.5,
+    "wpm": 132,
+    "confidence": 82,
+    "overall_score": 82,
+    "delivery_score": 80,
+    "content_score": 84,
+    "keyword_coverage": 85,
+    "topic_relevance": 80,
+    "intent_alignment": 82,
+    "technical_depth": 79,
+    "question_keywords": [
+      "breadth",
+      "first",
+      "search"
+    ],
+    "matched_keywords": [
+      "breadth",
+      "search"
+    ],
+    "matched_topic_terms": [
+      "graph",
+      "queue"
+    ],
+    "technical_hits": 4,
+    "question_type": "concept",
+    "strengths": [
+      "You covered key terms like breadth and search."
+    ],
+    "improvements": [
+      "Address tradeoffs more explicitly."
+    ],
+    "difficulty": "medium",
+    "weight": 25
+  }
+}

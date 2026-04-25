@@ -1,0 +1,753 @@
+PROJECT CONTEXT HANDOFF
+Generated from code inspection on 2026-04-12
+
+PURPOSE
+This repository is a FastAPI-based interview preparation product with a server-rendered frontend.
+It supports:
+- topic-based mock interviews
+- role-based mock interviews
+- custom interview templates created by signed-in users
+- study plans / prep paths tied to roles
+- public and personalized score leaderboards
+- transcript analysis from uploaded audio using Whisper
+- PDF export of interview reports
+- topic ratings, activity tracking, profile history, and admin catalog management
+
+If I need to resume work later, this file should be treated as the first-stop project summary.
+The actual runtime source of truth is the Python code, especially backend/main.py and backend/database.py.
+
+
+HIGH-LEVEL ARCHITECTURE
+Backend:
+- FastAPI app in backend/main.py
+- Business logic and persistence in backend/database.py
+- Transcript scoring and feedback heuristics in backend/analytics.py
+- Auth token creation/verification in backend/auth.py
+- Catalog defaults and question-bank parsing in backend/interview_catalog.py
+- PDF report generation in backend/pdf_generator.py
+
+Frontend:
+- HTML pages in templates/
+- CSS in static/css/
+- Browser logic in static/js/
+- The frontend is not React at runtime; the old React path was removed
+- The current visual direction is a shared dark editorial UI system with premium glass surfaces, tighter spacing, smaller contextual action bars, and stronger typography instead of oversized generic dashboard styling
+
+Data layer:
+- MySQL via mysql-connector-python
+- Database auto-initialization happens on app startup through init_database()
+- Many records store structured payloads in JSON columns or JSON strings
+
+Audio / AI:
+- openai-whisper is used locally for transcription
+- Transcript quality is then analyzed with in-repo heuristics, not with a remote API
+
+
+HOW THE APP STARTS
+Primary command:
+- uvicorn backend.main:app --reload
+
+Windows launcher:
+- START.bat starts uvicorn in a separate terminal and opens http://localhost:8000
+
+Important startup behavior:
+- backend/main.py loads .env from repo root
+- init_database() is called during import/startup
+- /static is mounted from the static/ directory
+- temp/ is ensured to exist for uploaded audio files
+- Whisper is loaded at startup with a primary and fallback model
+
+
+IMPORTANT FILES
+Core backend:
+- backend/main.py
+- backend/database.py
+- backend/analytics.py
+- backend/auth.py
+- backend/interview_catalog.py
+- backend/pdf_generator.py
+
+Schemas and database snapshots:
+- DATABASE_SCHEMA.sql
+
+Frontend pages:
+- templates/index.html
+- templates/leaderboards.html
+- templates/tracks.html
+- templates/roles.html
+- templates/auth.html
+- templates/profile.html
+- templates/admin.html
+- templates/custom_interviews.html
+- templates/prep_paths.html
+- templates/interview.html
+- templates/results.html
+
+Key frontend scripts:
+- static/js/leaderboards.js
+- static/js/main.js
+- static/js/recording.js
+- static/js/results.js
+- static/js/profile.js
+- static/js/auth.js
+- static/js/planner.js
+- static/js/custom-interviews.js
+- static/js/admin.js
+- static/js/catalog.js
+- static/js/session.js
+
+Tests:
+- tests/test_feature_connectivity.py
+- tests/fixtures/mock_app_data.json
+
+
+PRODUCT SURFACE
+1. Anonymous or signed-in users can run interview sessions.
+2. Signed-in users can save history, download PDFs, rate topics, create custom interviews, and create study plans.
+3. Admin users can manage topics, questions, and roles from the admin UI.
+4. Study plans generate multi-step prep paths and study materials for a selected role.
+5. Completing a study-plan-backed interview automatically updates the linked study step progress.
+6. Leaderboards expose anonymized ranking for everyone, while signed-in users can also see their own real placement.
+
+
+BACKEND ENTRYPOINT AND ROUTES
+Page routes:
+- GET / -> home page
+- GET /tracks
+- GET /roles
+- GET /auth
+- GET /profile
+- GET /admin
+- GET /custom-interviews
+- GET /leaderboards
+- GET /prep-paths
+- GET /interview
+- GET /results
+- GET /favicon.ico
+
+Auth and profile:
+- POST /api/auth/signup
+- POST /api/auth/login
+- GET /api/auth/users/{user_id}
+- GET /api/auth/users/{user_id}/history
+
+Catalog and public summary:
+- GET /api/ratings/topics
+- GET /api/topics/summary
+- GET /api/interview/catalog
+- GET /api/leaderboards
+
+Study planner:
+- GET /api/study-plans
+- POST /api/study-plans
+- GET /api/study-plans/{plan_id}
+- GET /api/study-plans/{plan_id}/steps/{step_id}/session-plan
+- PUT /api/study-plans/{plan_id}/steps/{step_id}
+- DELETE /api/study-plans/{plan_id}
+
+Admin:
+- GET /api/admin/bootstrap
+- GET /api/admin/access
+- POST /api/admin/topics
+- PUT /api/admin/topics/{topic_id}
+- POST /api/admin/topics/{topic_id}/archive
+- POST /api/admin/topics/{topic_id}/restore
+- DELETE /api/admin/topics/{topic_id}
+- POST /api/admin/questions
+- PUT /api/admin/questions/{question_id}
+- POST /api/admin/questions/{question_id}/archive
+- POST /api/admin/questions/{question_id}/restore
+- DELETE /api/admin/questions/{question_id}
+- POST /api/admin/roles
+- PUT /api/admin/roles/{role_id}
+- POST /api/admin/roles/{role_id}/archive
+- POST /api/admin/roles/{role_id}/restore
+- DELETE /api/admin/roles/{role_id}
+
+Interview planning and custom templates:
+- GET /api/interview/session-plan
+- GET /api/custom-interviews
+- GET /api/custom-interviews/{template_id}
+- GET /api/custom-interviews/{template_id}/session-plan
+- POST /api/custom-interviews
+- PUT /api/custom-interviews/{template_id}
+- DELETE /api/custom-interviews/{template_id}
+
+Ratings, audio, persistence, export:
+- POST /api/ratings
+- POST /transcribe
+- POST /save-interview
+- GET /generate-pdf/{session_id}
+- GET /get-session/{session_id}
+
+LEADERBOARD SYSTEM
+This is the current MVP leaderboard implementation.
+
+Backend support:
+- backend/database.py:get_score_leaderboard()
+- backend/main.py: GET /api/leaderboards
+- backend/main.py: GET /leaderboards
+
+Supported boards:
+- overall
+- weekly
+- topic
+
+Current leaderboard rules:
+- overall board ranks signed-in users by AVG(final_score) across all saved sessions
+- weekly board ranks signed-in users by AVG(final_score) across the last 7 days
+- topic board ranks signed-in users by AVG(final_score) for pure topic-mode sessions on one selected topic
+- guest sessions are excluded because they have no stable user_id
+- everyone except the currently signed-in user is anonymized as User_<hash>
+
+Minimum eligibility thresholds:
+- overall: 3 saved interviews
+- weekly: 2 saved interviews in the last 7 days
+- topic: 2 saved topic-mode interviews on the selected topic
+
+Response shape from /api/leaderboards:
+- success
+- board
+- title
+- entries
+- current_user_entry
+- current_user_progress
+- minimum_interviews
+- timeframe_days
+- total_ranked_users
+- topic
+
+Frontend for this module:
+- template: templates/leaderboards.html
+- script: static/js/leaderboards.js
+- style: static/css/leaderboards.css
+
+Frontend responsibilities:
+- switch between overall, weekly, and topic boards
+- load topics from the interview catalog for topic selection
+- render public leaderboard rows
+- show the signed-in user's exact rank when eligible
+- show eligibility progress when the user is signed in but not yet ranked
+
+
+AUTH MODEL
+Auth is custom and lightweight.
+It is NOT JWT.
+
+How it works:
+- backend/auth.py creates a signed token made of base64url(payload) + HMAC signature
+- payload includes user_id, email, username, is_admin, and exp
+- verify_auth_token() checks signature and expiration
+- extract_bearer_token() expects Authorization: Bearer <token>
+
+Access rules:
+- user profile and history routes are restricted to the matching signed-in user
+- admin routes require a signed-in user whose DB row has is_admin = true
+- sessions belonging to guests are effectively public because there is no owning user_id
+- sessions linked to a user require the matching authenticated user
+
+
+DATABASE OVERVIEW
+Most important note:
+- The live schema is best understood from backend/database.py:init_database()
+- SQL files are useful references, but the runtime initializer is more authoritative because it also performs incremental ALTER checks and seeds defaults
+
+Schema files:
+- DATABASE_SCHEMA.sql is the consolidated schema snapshot for the current app
+
+Core tables created by init_database():
+- users
+- interviews
+- topic_ratings
+- topic_activity
+- topics
+- questions
+- job_roles
+- custom_interviews
+- topic_study_materials
+- study_plans
+- study_plan_steps
+
+Table purposes:
+- users: local account store with salted PBKDF2 password hashes and is_admin flag
+- interviews: one row per saved interview session, with complete_data JSON as the main payload
+- topic_ratings: user feedback per interview session
+- topic_activity: tracks topic interview activity, mainly for signed-in topic sessions
+- topics: active interview topics shown in catalog
+- questions: question bank linked to topics
+- job_roles: role definitions plus topic weights and duration defaults
+- custom_interviews: saved user-authored interview templates
+- topic_study_materials: overview, revision notes, mistakes, rapid fire points, and prompts for planner topics
+- study_plans: saved prep path header row
+- study_plan_steps: per-step schedule and snapshot/progress data for a plan
+
+Important relationships:
+- interviews.user_id -> users.user_id
+- topic_ratings.session_id -> interviews.session_id
+- topic_ratings.user_id -> users.user_id
+- topic_activity.session_id -> interviews.session_id
+- topic_activity.user_id -> users.user_id
+- questions.topic_id -> topics.topic_id
+- custom_interviews.user_id -> users.user_id
+- topic_study_materials.topic_id -> topics.topic_id
+- study_plans.user_id -> users.user_id
+- study_plan_steps.plan_id -> study_plans.plan_id
+
+
+CATALOG SYSTEM
+The default topic and role catalog is defined in backend/interview_catalog.py.
+It contains:
+- TOPIC_CATALOG
+- ROLE_CATALOG
+- DURATION_BLUEPRINTS
+
+Topics include areas like:
+- graphs
+- datastructures
+- sorting
+- dp
+- database
+- systemdesign
+- behavioral
+- python
+- os
+- java
+- javascript
+- react
+- nodejs
+- machinelearning
+- genai
+- cloud
+- networking
+- security
+- testing
+- devops
+- apis
+
+Roles include weighted mixes of topics and default durations.
+The DB is seeded from these defaults by init_database() if catalog tables are empty or missing records.
+
+Question bank behavior:
+- interview_catalog.py parses a question bank from static/js/questions.js
+- DB questions are the main runtime source once loaded
+- role sessions are assembled by weighted topic selection and duration blueprint difficulty plans
+
+
+INTERVIEW SESSION FLOW
+There are several interview modes:
+- topic
+- role
+- custom
+- study-plan-derived runs that resolve into topic, role, or mixed plans
+
+General planning behavior:
+- GET /api/interview/session-plan builds a topic or role interview plan
+- topic mode selects questions for a single topic
+- role mode selects questions by role topic weights and duration blueprint
+
+Custom interview behavior:
+- Users can define their own questions with weight, target_seconds, and section_label
+- Templates are stored in custom_interviews.questions_json
+- A template can be converted into a runnable session plan through /api/custom-interviews/{template_id}/session-plan
+
+Study plan behavior:
+- A study plan is generated for a selected role and target_days
+- The outline is divided into phases like foundation, checkpoints, and simulation
+- Steps may be of type:
+  - revise
+  - topic_round
+  - mixed_quiz
+  - mock_interview
+- Some steps are informational only; revise steps are not directly runnable
+- Runnable steps can be turned into interview plans through /api/study-plans/{plan_id}/steps/{step_id}/session-plan
+
+Saving behavior:
+- POST /save-interview writes the full session payload into interviews.complete_data
+- For study-plan sessions, sync_study_step_result() marks the related step as done and updates snapshot metrics like:
+  - last_score
+  - best_score
+  - attempt_count
+  - average_score
+  - last_session_id
+  - last_completed_at
+  - last_confidence
+  - last_content_score
+  - last_delivery_score
+- For topic mode sessions, topic activity is also synced for signed-in users
+
+
+TRANSCRIPTION AND ANALYTICS
+Transcription route:
+- POST /transcribe
+
+Input:
+- multipart upload with audio file
+- form fields such as difficulty, topic, question, sample_answer, ideal_answer, analytics_mode, target_seconds, question_weight
+
+Whisper behavior:
+- Loads WHISPER_MODEL first, then WHISPER_FALLBACK_MODEL if needed
+- Uses a prompt biased toward technical Indian English / Hinglish
+- Tries multiple language hints from WHISPER_LANGUAGE_HINTS
+- Normalizes common technical phrases like BFS, DFS, Node.js, React, DBMS, SQL, API, LLM
+- Scores candidate transcriptions and accepts the best viable output
+
+Analytics behavior:
+- backend/analytics.py is heuristic-heavy and local
+- It computes metrics such as:
+  - transcript
+  - word_count
+  - filler words / filler list
+  - duration
+  - WPM
+  - confidence
+  - overall score
+  - delivery score
+  - content score
+  - keyword coverage
+  - topic relevance
+  - intent alignment
+  - technical depth
+  - strengths
+  - improvements
+- The module contains topic hints, aliases, signal terms, question guidance, and scoring heuristics
+
+
+PDF REPORTING
+PDF generation lives in backend/pdf_generator.py.
+
+Behavior:
+- GET /generate-pdf/{session_id} fetches the saved session, checks access, then builds a PDF
+- The PDF includes:
+  - session metadata
+  - each question and answer
+  - highlighted filler words
+  - per-question metrics
+  - custom interview timing fields when session_mode == custom
+  - overall summary averages
+
+Generated files are written into the current working directory unless a custom filename is supplied.
+There are existing generated PDFs in the repo root, so this behavior is already visible in the project state.
+
+
+STUDY PLANNER DETAILS
+This is one of the newer and more important subsystems.
+
+Main backend functions:
+- create_study_plan()
+- list_study_plans()
+- get_study_plan()
+- get_study_plan_step_session_plan()
+- update_study_plan_step_status()
+- delete_study_plan()
+- build_study_plan_outline()
+- build_study_plan_progress()
+- get_study_materials_for_topics()
+
+Study plan output shape includes:
+- plan
+- steps
+- materials
+- progress
+
+Plan summary tracks:
+- phase overview
+- focus topics
+- schedule intent
+
+Progress tracks:
+- total/completed steps
+- completion percent
+- average score
+- current focus
+- phase breakdown
+- topic progress
+- next steps
+
+Frontend for this module:
+- template: templates/prep_paths.html
+- script: static/js/planner.js
+
+Planner frontend responsibilities:
+- load role catalog
+- create study plans for the current signed-in user
+- list saved plans
+- render grouped steps by day
+- launch runnable step sessions
+- show progress widgets and study material cards
+- mark steps complete or update status
+
+Important planner rule:
+- revision steps are not runnable interviews
+- planner session launch only makes sense for topic_round, mixed_quiz, or mock_interview steps
+
+Recent planner/admin extension:
+- admin bootstrap now includes `materials` and admin has dedicated study-material save/update endpoints
+- study materials are intended to exist per topic, with generated fallback drafts when no database-edited notes exist yet
+- planner can now schedule `mcq_quiz` steps as lightweight checkpoints inside longer timelines
+- MCQ checkpoints are completed through `/api/study-plans/{plan_id}/steps/{step_id}/quiz-result`, not through the interview runtime
+- planner UI now handles three non-interview study actions distinctly: revision note review, MCQ checkpoint, and runnable interview steps
+
+Recent material-quality upgrade:
+- generated study materials now use richer family-level and topic-level guides instead of short generic blurbs
+- the seeded refresh logic upgrades previously auto-generated notes safely without overwriting manual admin-edited notes
+- planner material cards now surface extra derived sections such as core anchors, answer framework, deep-dive notes, and likely follow-up prompts
+- revision notes are now intentionally multi-line and should be rendered as structured study copy, not flattened into one sentence
+
+
+ADMIN AREA
+Admin UI is for catalog and overview management.
+
+Backend support:
+- GET /api/admin/bootstrap returns topics, roles, questions, and insights
+- CRUD/archive/restore routes exist for topics, questions, and roles
+- Admin access is based on users.is_admin
+
+Dashboard insight snapshot includes:
+- overview counts
+- mode breakdown
+- top topics
+- recent sessions
+- users with score/session aggregates
+
+Frontend:
+- template: templates/admin.html
+- script: static/js/admin.js
+
+
+FRONTEND PAGE MAP
+Home and navigation:
+- templates/index.html with static/js/home.js or main navigation support
+- Leaderboards are also linked from the home page, profile actions, select page intros, and the account dropdown
+- Interior pages intentionally keep page-level action bars small and contextual instead of exposing every destination at once
+- The home hero also avoids overloading the primary action cluster; broader navigation should live in shared chrome, not in every hero section
+- One exception is the admin-only home shortcut, which remains available as a single conditional CTA for admin users
+
+Catalog views:
+- templates/tracks.html with static/js/tracks.js
+- templates/roles.html with static/js/roles.js
+- static/js/catalog.js fetches /api/interview/catalog and /api/topics/summary
+
+Auth:
+- templates/auth.html with static/js/auth.js
+
+Interview run:
+- templates/interview.html
+- static/js/main.js manages session setup and save flow
+- static/js/recording.js handles recording and /transcribe calls
+- static/js/questions.js is the large client-side question/content source file
+
+Results and history:
+- templates/results.html with static/js/results.js
+- templates/profile.html with static/js/profile.js
+
+Custom interviews:
+- templates/custom_interviews.html with static/js/custom-interviews.js
+
+Study planner:
+- templates/prep_paths.html with static/js/planner.js
+
+Admin:
+- templates/admin.html with static/js/admin.js
+
+Leaderboards:
+- templates/leaderboards.html with static/js/leaderboards.js
+
+Session utilities:
+- static/js/session.js centralizes current-user storage, authenticatedFetch(), and the shared account dropdown
+- The shared account dropdown now carries some cross-app navigation so individual pages do not need oversized button clusters
+
+
+DATA CONTRACTS / REQUEST MODELS
+Pydantic request models in backend/main.py:
+- SignUpRequest: username, email, password
+- LoginRequest: identifier or email, plus password
+- RatingRequest: session_id, topic_id, rating, optional user_id
+- CustomInterviewQuestionRequest: question_text, weight, target_seconds, section_label
+- CustomInterviewTemplateRequest: title, description, total_duration_minutes, questions[]
+- AdminTopicRequest
+- AdminQuestionRequest
+- AdminRoleRequest
+- StudyPlanRequest: role_id, target_days
+- StudyPlanStepStatusRequest: status
+
+These are useful reference points when changing API payload shape.
+
+
+ENVIRONMENT VARIABLES
+From .env.example:
+- DB_HOST
+- DB_USER
+- DB_PASSWORD
+- DB_NAME
+- MAX_AUDIO_UPLOAD_BYTES
+- AUTH_SECRET
+- AUTH_TOKEN_MAX_AGE_SECONDS
+- WHISPER_MODEL
+- WHISPER_FALLBACK_MODEL
+- WHISPER_LANGUAGE_HINTS
+
+Additional behavior from code:
+- APP_LOG_LEVEL is also read by backend/main.py
+- WHISPER_ACCEPTABLE_SCORE and WHISPER_INITIAL_PROMPT are also read if present
+
+
+TESTING STATUS
+Main automated coverage currently lives in tests/test_feature_connectivity.py.
+
+What it does:
+- uses TestClient against backend.main.app
+- patches DB and Whisper dependencies heavily
+- verifies major route-level behavior and connectivity
+- covers auth, catalog, study planner, admin bootstrap, save flow, and transcribe flow with mocks
+
+Implication:
+- tests are useful for API contract regression
+- they are not full integration tests against a real MySQL instance or real Whisper model
+
+
+IMPORTANT IMPLEMENTATION NOTES
+1. The runtime schema is more current than the old SQL files.
+   If schema confusion happens, read init_database() first.
+
+2. Tokens are custom HMAC tokens, not JWTs.
+   Any auth changes should preserve create_auth_token(), verify_auth_token(), and frontend storage expectations.
+
+3. interviews.complete_data is the main session payload store.
+   A lot of reporting and history behavior depends on that JSON shape remaining stable.
+
+4. Study-plan result syncing happens automatically on save.
+   If save payloads change, make sure study_plan_id, study_step_id, and user_id still reach sync_study_step_result().
+
+5. Whisper loading is local and can fail gracefully.
+   If it fails, /transcribe returns an availability error instead of crashing the app.
+
+6. The frontend is page-based and tightly coupled to route names.
+   Renaming routes or changing payloads will likely require JS updates.
+
+7. Navigation should stay structured and minimal.
+   Avoid turning every page-intro area into a full app sitemap; prefer 2-3 contextual links plus the shared account/header navigation.
+
+8. The visual system should stay coherent across pages.
+   Prefer evolving shared primitives in base.css, style.css, and shared page-shell styles before making isolated one-off page tweaks.
+
+9. START.bat has a stray trailing line at the end:
+   "icorn backend.main:app --reload"
+   It does not appear intentional and is probably leftover noise.
+
+10. Leaderboards currently query on demand.
+   There is no snapshot or materialized leaderboard table yet.
+
+11. The repo contains a venv/ directory and generated PDFs.
+   Those are not core source files, just environment/runtime artifacts.
+
+
+SUGGESTED MENTAL MODEL FOR FUTURE WORK
+When changing the project, think in this order:
+1. Is the change page-level UI, API contract, or DB behavior?
+2. Which route in backend/main.py owns it?
+3. Which function in backend/database.py or analytics.py actually implements it?
+4. Which frontend file calls that route?
+5. Does the response shape affect profile, results, planner, or admin views?
+
+Useful common entrypoints:
+- New API behavior: backend/main.py
+- Persistence or business logic: backend/database.py
+- Scoring tweaks: backend/analytics.py
+- Planner behavior: backend/database.py + static/js/planner.js
+- Leaderboard behavior: backend/database.py + backend/main.py + static/js/leaderboards.js
+- Session run/save flow: static/js/main.js + backend/main.py + backend/database.py
+- Admin catalog issues: static/js/admin.js + backend/main.py + backend/database.py
+
+
+FAST RESUME CHECKLIST
+If resuming work later with minimal repo re-reading:
+1. Read this file first.
+2. Open backend/main.py to find the route involved.
+3. Open backend/database.py to find the underlying implementation.
+4. Open the matching static/js file for the page making the call.
+5. If schema is involved, trust init_database() before older SQL snapshots.
+
+
+RECOMMENDED FOLLOW-UP FILES TO READ ONLY IF NEEDED
+- backend/main.py for route behavior
+- backend/database.py for implementation details
+- static/js/main.js for interview run flow
+- static/js/planner.js for prep-path flow
+- static/js/admin.js for admin UI behavior
+- tests/test_feature_connectivity.py for expected API contracts
+
+
+SHORT PROJECT SUMMARY
+This is a single-app FastAPI interview coach product with MySQL persistence, local Whisper transcription, heuristic answer scoring, server-rendered pages, a custom signed-token auth layer, admin-managed topic/role/question catalogs, anonymized public/personalized leaderboards, user-defined custom interview templates, and a newer study planner subsystem that generates and tracks role-based prep paths.
+
+
+RECOVERY STATUS
+Updated on 2026-04-14 after a partial rollback to a zip baseline and a follow-up UI/theme reconstruction pass.
+
+What happened:
+- The project was rolled back to an older zip snapshot because that was safer than keeping a badly damaged current working copy.
+- Some newer files and docs were still preserved in the repo, especially PROJECT_CONTEXT.txt, newer templates/static assets, and screenshots showing the intended UI direction.
+- OneDrive history was not available, so recovery is being done incrementally from surviving evidence.
+
+What has already been reconstructed:
+- backend/database.py and backend/analytics.py were restored from the zip backup because the live copies had been heavily truncated.
+- Leaderboard backend support was re-added:
+  - backend/database.py now includes get_score_leaderboard()
+  - backend/main.py now includes GET /leaderboards
+  - backend/main.py now includes GET /api/leaderboards
+- Shared shell/navigation behavior and the cross-app theme layer were restored:
+  - static/js/appbar-account.js now triggers shared account rendering again
+  - static/js/session.js account dropdown now includes Leaderboards
+  - static/js/ui-theme.js now mounts from any page shell with `.appbar-controls` / `.interview-account-controls` instead of relying on the landing page only
+  - theme menu slots plus `/static/js/ui-theme.js` are now wired across the main app surfaces:
+    - templates/index.html
+    - templates/tracks.html
+    - templates/roles.html
+    - templates/interview.html
+    - templates/profile.html
+    - templates/auth.html
+    - templates/admin.html
+    - templates/custom_interviews.html
+    - templates/prep_paths.html
+    - templates/leaderboards.html
+    - templates/results.html
+  - static/css/base.css now carries the shared theme tokens for Nebula, Aurora, Sunset, and Ember
+  - static/css/style.css now includes the rebuilt appbar theme trigger/dropdown styling and stronger shared shell primitives
+  - page-level shells now respond to theme variables across the major frontend surfaces:
+    - static/css/topics.css
+    - static/css/auth.css
+    - static/css/profile.css
+    - static/css/admin.css
+    - static/css/custom-interviews.css
+    - static/css/planner.css
+    - static/css/leaderboards.css
+    - static/css/results.css
+    - static/css/interview.css
+  - a later visual pass on 2026-04-14 pushed the theme system closer to the preserved screenshots:
+    - landing / tracks / roles now use stronger stage-style theme backgrounds instead of subtle full-page tinting
+    - interview runtime now has a clearer split between cool primary panels and warmer side telemetry panels, with Sunset / Ember reading much more distinctly
+    - shared headers now carry a visible theme accent line so switching themes changes the shell immediately, not just the cards
+  - templates/profile.html already had navigation cleanup to expose Home, Topic tracks, and Leaderboards; that remains part of the recovered shell direction
+
+What still looks worth checking later:
+- The prep-path MCQ / quiz-result flow likely existed in the newer version and is still the most obvious backend/frontend recovery item to verify next.
+- The visual system is back and theme-aware again, but it still deserves a real browser smoke test for spacing, responsiveness, and screenshot-level polish.
+- Leaderboards and planner should be sanity-checked in the browser after the UI pass because those pages gained new shared chrome/theme behavior.
+
+Important recovery evidence still available:
+- interview_prep.zip was a useful baseline restore source.
+- temp/pre_restore_backup contains broken copies from before restoring database.py and analytics.py.
+- temp/zip_recovery contains extracted backup copies used during recovery.
+- Screenshots shared on 2026-04-14 confirm the intended newer UI direction:
+  - editorial gradient theme
+  - appbar theme chip like Sunset / Ember
+  - account dropdown with View profile, Leaderboards, Admin panel, Sign out
+  - newer interview session shell with Delivery readout / Speaking signals
+
+Verified during recovery:
+- backend files compile with py_compile
+- import backend.main had previously succeeded during the earlier backend recovery pass
+- database initialization and Whisper startup had previously completed during that import check
+- node --check passes for static/js/ui-theme.js after the theme rebuild
+- template scan confirms theme slots/scripts are attached across the main page shells
+- pytest could not be run in this workspace from either system Python or the repo venv because pytest is not currently installed there
